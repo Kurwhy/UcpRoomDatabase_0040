@@ -5,27 +5,31 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.pamucp2.data.dao.DokterDao
+import com.example.pamucp2.data.dao.JadwalDao
 import com.example.pamucp2.data.entity.Dokter
+import com.example.pamucp2.data.entity.Jadwal
 
-@Database(entities = [Dokter::class], version = 1, exportSchema = false)
-abstract class DokterDB : RoomDatabase() {
+@Database(entities = [Dokter::class,Jadwal::class], version = 1, exportSchema = false)
+abstract class RumahSakitDB : RoomDatabase() {
 
-    // Mendefinisikan fungsi untuk mengakses data Mahasiswa
     abstract fun dokterDao(): DokterDao
+    abstract fun jadwalDao(): JadwalDao
 
     companion object {
-        @Volatile // Memasitikan bahwa nilai variable Instance selalu sama di semua
-        private var Instance: DokterDB? = null
+        @Volatile
+        private var Instance: RumahSakitDB? = null
 
-        fun getDatabase(context: Context): DokterDB {
+        fun getDatabase(context: Context): RumahSakitDB {
             return (Instance ?: synchronized(this) {
                 Room.databaseBuilder(
                     context.applicationContext,
-                    DokterDB::class.java,
-                    "DokterDB"
+                    RumahSakitDB::class.java,
+                    "RumahSakit"
                 )
                     .build().also { Instance = it }
             })
         }
     }
+
+
 }
