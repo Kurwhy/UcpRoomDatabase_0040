@@ -5,12 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pamucp2.data.entity.Dokter
 import com.example.pamucp2.data.entity.Jadwal
-import com.example.pamucp2.repository.RepositoryJdl
+import com.example.pamucp2.repository.RepositoryRs
 import kotlinx.coroutines.launch
 
 data class JadwalEvent(
-    val idJdl: String = "",
+    val idJdl: Int = 0,
     val namaDokter: String = "",
     val namaPasien: String = "",
     val noHp: String = "",
@@ -20,25 +21,37 @@ data class JadwalEvent(
 )
 
 class JadwalViewModel(
-    private val repositoryJdl: RepositoryJdl
+    private val repositoryRs: RepositoryRs
 ) : ViewModel() {
 
     var uiState by mutableStateOf(JdlUIState())
+
+    init {
+        viewModelScope.launch {
+            try {
+                repositoryRs.getAllDok().collect { dokterList ->
+                    uiState = uiState.copy(dokterList = dokterList)
+                }
+            } catch (e: Exception) {
+                uiState = uiState.copy(snackBarMessage = "Gagal memuat daftar dokter")
+            }
+        }
+    }
 
     fun updateState(JadwalEvent: JadwalEvent) {
         uiState = uiState.copy(
             jadwalEvent = JadwalEvent,
         )
     }
+
     private fun validateField(): Boolean {
         val event = uiState.jadwalEvent
         val errorState = FormErrorStateJdl(
-            idJdl = if (event.idJdl.isNotEmpty()) null else "idJdl tidak boleh kosong",
-            namaDokter = if (event.namaDokter.isNotEmpty()) null else "namaDokter tidak boleh kosong",
-            namaPasien = if (event.namaPasien.isNotEmpty()) null else "namaPasien tidak boleh kosong",
-            noHp = if (event.noHp.isNotEmpty()) null else "noHp tidak boleh kosong",
-            tanggalKonsul = if (event.tanggalKonsul.isNotEmpty()) null else "tanggalKonsul tidak boleh kosong",
-            status = if (event.status.isNotEmpty()) null else "status tidak boleh kosong",
+            namaDokter = if (event.namaDokter.isNotEmpty()) null else "Nama Dokter tidak boleh kosong",
+            namaPasien = if (event.namaPasien.isNotEmpty()) null else "Nama Pasien tidak boleh kosong",
+            noHp = if (event.noHp.isNotEmpty()) null else "No Hp tidak boleh kosong",
+            tanggalKonsul = if (event.tanggalKonsul.isNotEmpty()) null else "Tanggal Konsul tidak boleh kosong",
+            status = if (event.status.isNotEmpty()) null else "Status tidak boleh kosong",
         )
 
         uiState = uiState.copy(isEntryValid = errorState)
@@ -50,10 +63,10 @@ class JadwalViewModel(
 
         if (validateField()) {
             viewModelScope.launch {
-                try{
-                    repositoryJdl.insertJdl(currentEvent.toJadwalEntity())
+                try {
+                    repositoryRs.insertJdl(currentEvent.toJadwalEntity())
                     uiState = uiState.copy(
-                        snackBarMessage =  "Data berhasil disimpan",
+                        snackBarMessage = "Data berhasil disimpan",
                         jadwalEvent = JadwalEvent(),
                         isEntryValid = FormErrorStateJdl()
                     )
@@ -79,10 +92,10 @@ data class JdlUIState(
     val jadwalEvent: JadwalEvent = JadwalEvent(),
     val isEntryValid: FormErrorStateJdl = FormErrorStateJdl(),
     val snackBarMessage: String? = null,
+    val dokterList: List<Dokter> = emptyList()
 )
 
 data class FormErrorStateJdl(
-    val idJdl: String? = null,
     val namaDokter: String? = null,
     val namaPasien: String? = null,
     val noHp: String? = null,
@@ -90,8 +103,7 @@ data class FormErrorStateJdl(
     val status: String? = null
 ) {
     fun isValid(): Boolean {
-        return idJdl == null
-                && namaDokter == null
+        return  namaDokter == null
                 && namaPasien == null
                 && noHp == null
                 && tanggalKonsul == null

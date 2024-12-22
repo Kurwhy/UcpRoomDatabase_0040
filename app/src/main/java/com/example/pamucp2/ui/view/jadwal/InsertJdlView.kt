@@ -5,19 +5,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pamucp2.data.entity.Dokter
 import com.example.pamucp2.ui.costumwidget.TopAppBar
-import com.example.pamucp2.ui.navigation.AlamatNavigasi
 import com.example.pamucp2.ui.viewmodel.*
 import kotlinx.coroutines.launch
-
-object DestinasiInsertJdl : AlamatNavigasi {
-    override val route: String = "insert_jdl"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,7 +89,8 @@ fun InsertBodyJdl(
     modifier: Modifier = Modifier,
     onValueChange: (JadwalEvent) -> Unit,
     uiState: JdlUIState,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    dokList: List<Dokter> = uiState.dokterList
 ) {
     Column(
         modifier = modifier
@@ -112,7 +110,7 @@ fun InsertBodyJdl(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Form Tambah Dokter",
+                    text = "Form Tambah Jadwal",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -124,20 +122,15 @@ fun InsertBodyJdl(
                     onValueChange = { onValueChange(uiState.jadwalEvent.copy(namaPasien = it)) }
                 )
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
-                InputField(
-                    label = "ID Jadwal",
-                    value = uiState.jadwalEvent.idJdl,
-                    error = uiState.isEntryValid.idJdl,
-                    onValueChange = { onValueChange(uiState.jadwalEvent.copy(idJdl = it)) }
+                Selector(
+                    selected = uiState.jadwalEvent.namaDokter,
+                    onSelect = { selectedDokter ->
+                        onValueChange(uiState.jadwalEvent.copy(namaDokter = selectedDokter))
+                    },
+                    dokterList = dokList
                 )
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
-                InputField(
-                    label = "Nama Dokter",
-                    value = uiState.jadwalEvent.namaDokter,
-                    error = uiState.isEntryValid.namaDokter,
-                    onValueChange = { onValueChange(uiState.jadwalEvent.copy(namaDokter = it)) }
-                )
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
+
                 InputField(
                     label = "No Hp",
                     value = uiState.jadwalEvent.noHp,
@@ -194,6 +187,49 @@ fun InputField(
                 color = Color.Red,
                 style = MaterialTheme.typography.bodySmall
             )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Selector(
+    selected: String?,
+    onSelect: (String) -> Unit,
+    dokterList: List<Dokter>
+) {
+    val options = dokterList.map { it.nama }
+    val expanded = rememberSaveable { mutableStateOf(false) }
+    val currentSelection = remember { mutableStateOf(selected ?: options.getOrNull(0)) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded.value,
+        onExpandedChange = { expanded.value = !expanded.value }
+    ) {
+        OutlinedTextField(
+            value = currentSelection.value ?: "",
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("Nama Dokter") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
+        )
+        ExposedDropdownMenu(
+            expanded = expanded.value,
+            onDismissRequest = { expanded.value = false }
+        ) {
+            options.forEach { selectionOption ->
+                DropdownMenuItem(
+                    text = { Text(selectionOption) },
+                    onClick = {
+                        currentSelection.value = selectionOption
+                        expanded.value = false
+                        onSelect(selectionOption)
+                    }
+                )
+            }
         }
     }
 }
