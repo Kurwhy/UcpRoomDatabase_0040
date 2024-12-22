@@ -24,12 +24,10 @@ abstract class RumahSakitDB : RoomDatabase() {
                 Room.databaseBuilder(
                     context.applicationContext,
                     RumahSakitDB::class.java,
-                    "RumahSakitDb"
+                    "RumahSakit"
                 )
                     .build().also { Instance = it }
             })
         }
     }
-
-
 }
