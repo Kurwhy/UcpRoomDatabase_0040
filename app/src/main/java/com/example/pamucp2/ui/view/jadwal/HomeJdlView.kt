@@ -239,7 +239,7 @@ fun BodyHomeJdlView(
                     contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp)
                 ) {
                     items(homeUiStateJdl.listJdl) { jdl ->
-                        CardJdl(jdl = jdl, onClick = { onClick(jdl.idJdl) })
+                        CardJdl(jdl = jdl, onClick = { onClick(jdl.idJdl.toString()) })
                     }
                 }
             }
