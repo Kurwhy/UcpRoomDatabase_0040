@@ -37,7 +37,6 @@ import com.example.pamucp2.ui.viewmodel.PenyediaViewModel
 fun HomeDokView(
     viewModel: HomeDokViewModel = viewModel(factory = PenyediaViewModel.Factory),
     onAddDok: () -> Unit = { },
-    onDetailClick: (String) -> Unit = { },
     onSeeJdl: () -> Unit = { },
     onSeeDok: () -> Unit = { },
     modifier: Modifier = Modifier
@@ -112,7 +111,6 @@ fun HomeDokView(
 
         BodyHomeDokView(
             homeUiStateDok = homeUiState,
-            onClick = { onDetailClick(it) },
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -190,7 +188,7 @@ fun Header(
 @Composable
 fun BodyHomeDokView(
     homeUiStateDok: HomeUiStateDok,
-    onClick: (String) -> Unit = { },
+    onClick: (Int) -> Unit = { },
     modifier: Modifier = Modifier
 ) {
     Box(
