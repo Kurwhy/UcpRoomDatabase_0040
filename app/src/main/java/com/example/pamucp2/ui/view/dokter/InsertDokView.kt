@@ -12,13 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pamucp2.ui.costumwidget.TopAppBar
-import com.example.pamucp2.ui.navigation.AlamatNavigasi
 import com.example.pamucp2.ui.viewmodel.*
 import kotlinx.coroutines.launch
-
-object DestinasiInsertDok : AlamatNavigasi {
-    override val route: String = "insert_dok"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -123,13 +118,6 @@ fun InsertBodyDok(
                     value = uiState.dokterEvent.nama,
                     error = uiState.isEntryValid.nama,
                     onValueChange = { onValueChange(uiState.dokterEvent.copy(nama = it)) }
-                )
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
-                InputField(
-                    label = "ID Dokter",
-                    value = uiState.dokterEvent.idDok,
-                    error = uiState.isEntryValid.idDok,
-                    onValueChange = { onValueChange(uiState.dokterEvent.copy(idDok = it)) }
                 )
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
                 Selector(
