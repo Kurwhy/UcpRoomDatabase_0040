@@ -60,7 +60,7 @@ fun DetailJdlView(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onEditClick(viewModel.detailUiState.value.detailUiEvent.idJdl) },
+                onClick = { onEditClick(viewModel.detailUiState.value.detailUiEvent.idJdl.toString()) },
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(16.dp)
             ) {
@@ -171,7 +171,7 @@ fun ItemDetailJdl(
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            ComponentDetailJdl(judul = "ID JDL", isinya = jadwal.idJdl)
+            ComponentDetailJdl(judul = "ID Jadwal", isinya = jadwal.idJdl.toString())
             Divider(modifier = Modifier.padding(vertical = 8.dp))
             ComponentDetailJdl(judul = "Nama Pasien", isinya = jadwal.namaPasien)
             Divider(modifier = Modifier.padding(vertical = 8.dp))
