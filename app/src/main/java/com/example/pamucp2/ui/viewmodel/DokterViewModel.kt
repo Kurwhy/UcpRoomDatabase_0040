@@ -6,11 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pamucp2.data.entity.Dokter
-import com.example.pamucp2.repository.RepositoryDok
+import com.example.pamucp2.repository.RepositoryRs
 import kotlinx.coroutines.launch
 
 data class DokterEvent(
-    val idDok: String = "",
+    val idDok: Int = 0,
     val nama: String = "",
     val spesialis: String = "",
     val klinik: String = "",
@@ -20,7 +20,7 @@ data class DokterEvent(
     )
 
 class DokterViewModel(
-    private val repositoryDok: RepositoryDok
+    private val repositoryRs: RepositoryRs
 ) : ViewModel() {
 
     var uiState by mutableStateOf(DokUIState())
@@ -33,7 +33,6 @@ class DokterViewModel(
     private fun validateField(): Boolean {
         val event = uiState.dokterEvent
         val errorState = FormErrorStateDok(
-            idDok = if (event.idDok.isNotEmpty()) null else "idDok tidak boleh kosong",
             nama = if (event.nama.isNotEmpty()) null else "nama tidak boleh kosong",
             spesialis = if (event.spesialis.isNotEmpty()) null else "spesialis tidak boleh kosong",
             klinik = if (event.klinik.isNotEmpty()) null else "klinik tidak boleh kosong",
@@ -51,7 +50,7 @@ class DokterViewModel(
         if (validateField()) {
             viewModelScope.launch {
                 try{
-                    repositoryDok.insertDok(currentEvent.toDokterEntity())
+                    repositoryRs.insertDok(currentEvent.toDokterEntity())
                     uiState = uiState.copy(
                         snackBarMessage =  "Data berhasil disimpan",
                         dokterEvent = DokterEvent(),
@@ -82,7 +81,6 @@ data class DokUIState(
 )
 
 data class FormErrorStateDok(
-    val idDok: String? = null,
     val nama: String? = null,
     val spesialis: String? = null,
     val klinik: String? = null,
@@ -90,8 +88,7 @@ data class FormErrorStateDok(
     val jamKerja: String? = null
 ) {
     fun isValid(): Boolean {
-        return idDok == null
-                && nama == null
+        return nama == null
                 && spesialis == null
                 && klinik == null
                 && noHp == null

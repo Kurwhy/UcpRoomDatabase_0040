@@ -2,22 +2,17 @@ package com.example.pamucp2.dependeciesinjection
 
 import android.content.Context
 import com.example.pamucp2.data.database.RumahSakitDB
-import com.example.pamucp2.repository.LocalRepositoryDok
-import com.example.pamucp2.repository.LocalRepositoryJdl
-import com.example.pamucp2.repository.RepositoryDok
-import com.example.pamucp2.repository.RepositoryJdl
+import com.example.pamucp2.repository.LocalRepositoryRs
+import com.example.pamucp2.repository.RepositoryRs
 
 
 interface InterfaceContainerApp {
-    val repositoryDok: RepositoryDok
-    val repositoryJdl: RepositoryJdl
+    val repositoryRs: RepositoryRs
 }
 
 class ContainerApp(private val context: Context) : InterfaceContainerApp {
-    override val repositoryDok: RepositoryDok by lazy {
-        LocalRepositoryDok(RumahSakitDB.getDatabase(context).dokterDao())
-    }
-    override val repositoryJdl: RepositoryJdl by lazy {
-        LocalRepositoryJdl(RumahSakitDB.getDatabase(context).jadwalDao())
+    override val repositoryRs: RepositoryRs by lazy {
+        LocalRepositoryRs(RumahSakitDB.getDatabase(context).dokterDao(),
+            RumahSakitDB.getDatabase(context).jadwalDao())
     }
 }

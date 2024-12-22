@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pamucp2.data.entity.Jadwal
-import com.example.pamucp2.repository.RepositoryJdl
+import com.example.pamucp2.repository.RepositoryRs
 import com.example.pamucp2.ui.navigation.DestinasiUpdate
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -15,16 +15,16 @@ import kotlinx.coroutines.launch
 
 class UpdateJdlViewModel (
     savedStateHandle: SavedStateHandle,
-    private val repositoryJdl: RepositoryJdl
+    private val repositoryRs: RepositoryRs
 ) : ViewModel(){
     var updateUIState by mutableStateOf(JdlUIState())
         private set
 
-    private val _idJdl: String = checkNotNull(savedStateHandle[DestinasiUpdate.IDJDL])
+    private val _idJdl: Int = checkNotNull(savedStateHandle[DestinasiUpdate.IDJDL])
 
     init {
         viewModelScope.launch {
-            updateUIState = repositoryJdl.getJdl(_idJdl)
+            updateUIState = repositoryRs.getJdl(_idJdl)
                 .filterNotNull()
                 .first()
                 .toUIStateJdl()
@@ -40,7 +40,6 @@ class UpdateJdlViewModel (
     fun validateFields(): Boolean {
         val event = updateUIState.jadwalEvent
         val errorState = FormErrorStateJdl(
-            idJdl = if (event.idJdl.isNotEmpty()) null else "idJdl tidak boleh kosong",
             namaDokter = if (event.namaDokter.isNotEmpty()) null else "Nama Dokter tidak boleh kosong",
             namaPasien = if (event.namaPasien.isNotEmpty()) null else "Nama Pasien tidak boleh kosong",
             noHp = if (event.noHp.isNotEmpty()) null else "noHp tidak boleh kosong",
@@ -58,7 +57,7 @@ class UpdateJdlViewModel (
         if (validateFields()) {
             viewModelScope.launch {
                 try {
-                    repositoryJdl.updateJdl(currentEvent.toJadwalEntity())
+                    repositoryRs.updateJdl(currentEvent.toJadwalEntity())
                     updateUIState = updateUIState.copy(
                         snackBarMessage = "Data berhasil diupdate",
                         jadwalEvent = JadwalEvent(),

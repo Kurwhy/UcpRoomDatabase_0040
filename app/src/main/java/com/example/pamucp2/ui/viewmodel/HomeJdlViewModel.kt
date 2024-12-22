@@ -3,7 +3,7 @@ package com.example.pamucp2.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pamucp2.data.entity.Jadwal
-import com.example.pamucp2.repository.RepositoryJdl
+import com.example.pamucp2.repository.RepositoryRs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 
 class HomeJdlViewModel(
-    private val repositoryJdl: RepositoryJdl
+    private val repositoryRs: RepositoryRs
 ): ViewModel() {
-    val homeUiState: StateFlow<HomeUiStateJdl> = repositoryJdl.getAllJdl()
+    val homeUiState: StateFlow<HomeUiStateJdl> = repositoryRs.getAllJdl()
         .filterNotNull()
         .map {
             HomeUiStateJdl(

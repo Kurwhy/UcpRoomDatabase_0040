@@ -3,7 +3,7 @@ package com.example.pamucp2.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pamucp2.data.entity.Dokter
-import com.example.pamucp2.repository.RepositoryDok
+import com.example.pamucp2.repository.RepositoryRs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 
 class HomeDokViewModel(
-    private val repositoryDok: RepositoryDok
+    private val repositoryRs: RepositoryRs
 ): ViewModel() {
-    val homeUiState: StateFlow<HomeUiStateDok> = repositoryDok.getAllDok()
+    val homeUiState: StateFlow<HomeUiStateDok> = repositoryRs.getAllDok()
         .filterNotNull()
         .map {
             HomeUiStateDok(

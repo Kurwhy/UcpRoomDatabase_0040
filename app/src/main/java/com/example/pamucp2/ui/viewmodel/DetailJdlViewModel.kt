@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pamucp2.data.entity.Jadwal
-import com.example.pamucp2.repository.RepositoryJdl
+import com.example.pamucp2.repository.RepositoryRs
 import com.example.pamucp2.ui.navigation.DestinasiDetail
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,11 +18,11 @@ import kotlinx.coroutines.launch
 
 class DetailJdlViewModel (
     savedStateHandle: SavedStateHandle,
-    private val repositoryJdl: RepositoryJdl,
+    private val repositoryRs: RepositoryRs,
 ) : ViewModel(){
-    private val _idJdl: String = checkNotNull(savedStateHandle[DestinasiDetail.IDJDL])
+    private val _idJdl: Int = checkNotNull(savedStateHandle[DestinasiDetail.IDJDL])
 
-    val detailUiState: StateFlow<DetailUiState> = repositoryJdl.getJdl(_idJdl)
+    val detailUiState: StateFlow<DetailUiState> = repositoryRs.getJdl(_idJdl)
         .filterNotNull()
         .map {
             DetailUiState(
@@ -54,7 +54,7 @@ class DetailJdlViewModel (
     fun deteleJdl() {
         detailUiState.value.detailUiEvent.toJadwalEntity().let {
             viewModelScope.launch {
-                repositoryJdl.deleteJdl(it)
+                repositoryRs.deleteJdl(it)
             }
         }
     }
