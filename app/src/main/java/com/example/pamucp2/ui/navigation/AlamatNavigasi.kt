@@ -4,10 +4,16 @@ interface AlamatNavigasi {
     val route: String
 }
 object DestinasiHomeDok : AlamatNavigasi {
-    override val route: String = "home_dok"
+    override val route = "home_dok"
 }
 object DestinasiHomeJdl : AlamatNavigasi {
-    override val route: String = "home_jdl"
+    override val route = "home_jdl"
+}
+object DestinasiInsertDok : AlamatNavigasi {
+    override val route = "insert_dok"
+}
+object DestinasiInsertJdl : AlamatNavigasi {
+    override val route = "insert_jdl"
 }
 object DestinasiDetail : AlamatNavigasi {
     override val route = "detail"
