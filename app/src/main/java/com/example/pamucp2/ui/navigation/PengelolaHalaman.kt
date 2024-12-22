@@ -8,10 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.pamucp2.ui.view.dokter.DestinasiInsertDok
 import com.example.pamucp2.ui.view.dokter.HomeDokView
 import com.example.pamucp2.ui.view.dokter.InsertDokView
-import com.example.pamucp2.ui.view.jadwal.DestinasiInsertJdl
 import com.example.pamucp2.ui.view.jadwal.DetailJdlView
 import com.example.pamucp2.ui.view.jadwal.HomeJdlView
 import com.example.pamucp2.ui.view.jadwal.InsertJdlView
@@ -86,11 +84,11 @@ fun PengelolaHalaman(
             DestinasiDetail.routeWithArg,
             arguments = listOf(
                 navArgument(DestinasiDetail.IDJDL){
-                    type = NavType.StringType
+                    type = NavType.IntType
                 }
             )
         ){
-            val noJdl = it.arguments?.getString(DestinasiDetail.IDJDL)
+            val noJdl = it.arguments?.getInt(DestinasiDetail.IDJDL)
             noJdl?.let { noJdl ->
                 DetailJdlView(
                     onBack = {
@@ -110,7 +108,7 @@ fun PengelolaHalaman(
             DestinasiUpdate.routeWithArg,
             arguments = listOf(
                 navArgument(DestinasiUpdate.IDJDL){
-                    type = NavType.StringType
+                    type = NavType.IntType
                 }
             )
         ){
