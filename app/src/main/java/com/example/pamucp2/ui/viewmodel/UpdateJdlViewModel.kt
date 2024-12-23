@@ -24,10 +24,15 @@ class UpdateJdlViewModel (
 
     init {
         viewModelScope.launch {
-            updateUIState = repositoryRs.getJdl(_idJdl)
-                .filterNotNull()
-                .first()
-                .toUIStateJdl()
+            try {
+                val dokterList = repositoryRs.getAllDok().first()
+                updateUIState = repositoryRs.getJdl(_idJdl)
+                    .filterNotNull()
+                    .first()
+                    .toUIStateJdl()
+                    .copy(dokterList = dokterList)
+            } catch (e: Exception) {
+            }
         }
     }
 
