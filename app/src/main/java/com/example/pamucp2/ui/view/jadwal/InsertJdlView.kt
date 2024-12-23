@@ -1,7 +1,9 @@
 package com.example.pamucp2.ui.view.jadwal
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -214,7 +216,13 @@ fun Selector(
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            shape = RoundedCornerShape(8.dp)
         )
         ExposedDropdownMenu(
             expanded = expanded.value,
@@ -227,7 +235,11 @@ fun Selector(
                         currentSelection.value = selectionOption
                         expanded.value = false
                         onSelect(selectionOption)
-                    }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
         }
